@@ -1,17 +1,39 @@
 ---
-title: "Statistical Inference Course Project"
+title: "Statistical Inference Course Project 1"
 author: "Janus"
-date: "Monday, October 19, 2015"
-output: html_document
+date: "Monday, October 20, 2015"
+output: pdf_document
 ---
 
-Task
+In this project you will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Set lambda = 0.2 for all of the simulations. You will investigate the distribution of averages of 40 exponentials. Note that you will need to do a thousand simulations.
+
+Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials.  You should
+1. Show the sample mean and compare it to the theoretical mean of the distribution.
+2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+3. Show that the distribution is approximately normal.
+
+In point 3, focus on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials. 
+
+As a motivating example, compare the distribution of 1000 random uniforms
+```{r}
+hist(runif(1000))
+```
+
+
+and the distribution of 1000 averages of 40 random uniforms
+
+```{r}
+mns = NULL
+for (i in 1 : 1000) mns = c(mns, mean(runif(40)))
+hist(mns)
+```
+
+
+This distribution looks far more Gaussian than the original uniform distribution!
+
 The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also also 1/lambda. Set lambda = 0.2 for all of the simulations. In this simulation, you will investigate the distribution of averages of 40 exponential(0.2)s. Note that you will need to do a thousand or so simulated averages of 40 exponentials.
 
 ```{r}
-# set seed for reproducability
-set.seed(31)
-
 # set lambda to 0.2
 lambda <- 0.2
 
@@ -29,7 +51,7 @@ means_exponentials <- apply(simulated_exponentials, 2, mean)
 ```
 
 
-Question 1
+Question 1:
 Show where the distribution is centered at and compare it to the theoretical center of the distribution.
 
 ```{r, echo=FALSE}
@@ -49,15 +71,15 @@ theory_mean
 # visualization
 hist(means_exponentials, xlab = "mean", main = "Exponential Function Simulations")
 abline(v = analytical_mean, col = "red")
-abline(v = theory_mean, col = "orange")
+abline(v = theory_mean, col = "green")
 ```
 
 
 
-Answer 1
+Answer 1:
 The analytics mean is 4.993867 the theoretical mean 5. The center of distribution of averages of 40 exponentials is very close to the theoretical center of the distribution.
 
-Question 2
+Question 2:
 Show how variable it is and compare it to the theoretical variance of the distribution.
 ```{r}
 # standard deviation of distribution
@@ -80,16 +102,16 @@ variance_theory
 ```
 
 
-Answer 2
-Standard Deviation of the distribution is 0.7931608 with the theoretical SD calculated as 0.7905694. The Theoretical variance is calculated as (1?????1n???)2 = 0.625. The actual variance of the distribution is 0.6291041
+Answer 2:
+Standard Deviation of the distribution is 0.7931608 with the theoretical SD calculated as 0.7905694. The Theoretical variance is calculated as ((1/lambda)*(1/sqrt(n)))^2 = 0.625. The actual variance of the distribution is 0.6291041
 
-Question 3
+Question 3:
 Show that the distribution is approximately normal.
 
 ```{r}
 xfit <- seq(min(means_exponentials), max(means_exponentials), length=100)
 yfit <- dnorm(xfit, mean=1/lambda, sd=(1/lambda/sqrt(n)))
-hist(means_exponentials,breaks=n,prob=T,col="orange",xlab = "means",main="Density of means",ylab="density")
+hist(means_exponentials,breaks=n,prob=T,col="green",xlab = "means",main="Density of means",ylab="density")
 lines(xfit, yfit, pch=22, col="black", lty=5)
 ```
 
@@ -101,5 +123,5 @@ qqline(means_exponentials, col = 2)
 ```
 
 
-Answer 3
+Answer 3:
 Due to Due to the central limit theorem (CLT), the distribution of averages of 40 exponentials is very close to a normal distribution.
